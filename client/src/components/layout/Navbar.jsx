@@ -1,18 +1,33 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, NavLinkButton } from "../ui";
 import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const menuRef = useRef(null);
 
+  const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
     logout();
+    setMenuOpen(false);
     navigate("/login");
   };
+
+  // ✅ CLOSE ON OUTSIDE CLICK
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const navItems = [
     { name: "Home", to: "/" },
@@ -87,44 +102,73 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* MOBILE MENU BUTTON */}
+        {/* MOBILE BUTTON (☰ / ✕) */}
         <button
           className="md:hidden text-2xl"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          ☰
+          {menuOpen ? "✕" : "☰"}
         </button>
       </div>
 
       {/* MOBILE MENU */}
       {menuOpen && (
-        <div className="md:hidden bg-white px-4 pb-4 space-y-3 shadow">
+        <div
+          ref={menuRef}
+          className="md:hidden bg-white px-4 pb-4 pt-2 space-y-3 shadow-lg"
+        >
 
           {navItems.map((item) => (
-            <NavLinkButton key={item.to} to={item.to} className="block">
+            <NavLinkButton
+              key={item.to}
+              to={item.to}
+              className="block w-full"
+              onClick={() => setMenuOpen(false)}
+            >
               {item.name}
             </NavLinkButton>
           ))}
 
-          {/* ADMIN BUTTON */}
-          {user?.isAdmin && (
-            <Button
-              className="w-full"
-              variant="primary"
-              onClick={() => navigate("/admin/dashboard")}
-            >
-              Admin Panel
-            </Button>
-          )}
+          {user ? (
+            <div className="space-y-2 pt-2 border-t">
 
-          {user && (
-            <Button
-              variant="primary"
-              className="w-full mt-2"
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
+              <p className="font-semibold text-gray-700">{user.name}</p>
+
+              {user?.isAdmin && (
+                <Button
+                  className="w-full"
+                  variant="primary"
+                  onClick={() => {
+                    navigate("/admin/dashboard");
+                    setMenuOpen(false);
+                  }}
+                >
+                  Admin Panel
+                </Button>
+              )}
+
+              <Button
+                className="w-full"
+                variant="primary"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-2 pt-2 border-t">
+              <Link to="/login" onClick={() => setMenuOpen(false)}>
+                <Button className="w-full" variant="primary">
+                  Login
+                </Button>
+              </Link>
+
+              <Link to="/signup" onClick={() => setMenuOpen(false)}>
+                <Button className="w-full" variant="primary">
+                  Signup
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
       )}

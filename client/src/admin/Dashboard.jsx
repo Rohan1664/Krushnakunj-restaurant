@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Section, Container, Text, Card } from "../components/ui";
+import { Section, Container, Text, Card, Button } from "../components/ui";
+import { useNavigate } from "react-router-dom";
 
 import { getProducts } from "../services/productService";
 import { getOrders } from "../services/orderService";
 import { getUsers } from "../services/userService";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   const [stats, setStats] = useState({
     products: 0,
     orders: 0,
@@ -18,7 +21,7 @@ const Dashboard = () => {
 
   const [loading, setLoading] = useState(true);
 
-  const formatOrderId = (id) => id.slice(-6).toUpperCase();
+  const formatOrderId = (id) => id?.slice(-6).toUpperCase();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -29,10 +32,19 @@ const Dashboard = () => {
           getUsers(),
         ]);
 
-        const products = productsRes.data;
-        const orders = ordersRes.data;
-        const users = usersRes.data;
+        const products = productsRes.data || [];
 
+        // ✅ FIX ORDERS
+        const orders = Array.isArray(ordersRes.data)
+          ? ordersRes.data
+          : ordersRes.data?.orders || [];
+
+        // ✅ FIX USERS (MAIN FIX)
+        const users = Array.isArray(usersRes.data)
+          ? usersRes.data
+          : usersRes.data?.users || [];
+
+        // 💰 revenue
         const revenue = orders.reduce(
           (total, order) => total + (order.totalPrice || 0),
           0
@@ -45,8 +57,9 @@ const Dashboard = () => {
           revenue,
         });
 
-        setRecentOrders(orders.slice(-5).reverse());
-        setRecentUsers(users.slice(-5).reverse());
+        // ✅ latest 10
+        setRecentOrders(orders.slice(-10).reverse());
+        setRecentUsers(users.slice(-10).reverse());
 
       } catch (error) {
         console.log("Dashboard error:", error);
@@ -78,28 +91,34 @@ const Dashboard = () => {
         ) : (
           <>
             {/* ================= STATS ================= */}
-            <div className="grid md:grid-cols-4 gap-6 mb-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
               {statsData.map((item, index) => (
-                <Card key={index} className="p-6 text-center">
-                  <Text className="text-gray-600">{item.title}</Text>
-                  <Text variant="title" className="text-orange-500 mt-2">
+                <Card key={index} className="p-4 text-center">
+                  <Text className="text-gray-600 text-sm">
+                    {item.title}
+                  </Text>
+                  <Text className="text-orange-500 mt-2 text-lg font-bold">
                     {item.value}
                   </Text>
                 </Card>
               ))}
             </div>
 
-            
             {/* ================= RECENT ORDERS ================= */}
             <div className="mb-10">
-              <Text variant="subtitle" className="mb-4">
-                Recent Orders
-              </Text>
+              <div className="flex justify-between items-center mb-4">
+                <Text variant="subtitle">Recent Orders</Text>
 
-              <div className="bg-white shadow rounded overflow-hidden">
+                <Button
+                  variant="primary"
+                  onClick={() => navigate("/admin/orders")}
+                >
+                  View All
+                </Button>
+              </div>
 
-                {/* ✅ HEADER */}
-                <div className="grid grid-cols-5 bg-gray-100 p-4 font-semibold">
+              <div className="bg-white shadow rounded overflow-x-auto">
+                <div className="min-w-[700px] grid grid-cols-5 bg-gray-100 p-3 font-semibold text-sm">
                   <span>Order ID</span>
                   <span>Customer</span>
                   <span>Items</span>
@@ -107,41 +126,34 @@ const Dashboard = () => {
                   <span>Status</span>
                 </div>
 
-                {/* ✅ BODY */}
                 {recentOrders.length === 0 ? (
                   <p className="p-4 text-gray-500">No orders found</p>
                 ) : (
                   recentOrders.map((order) => (
                     <div
                       key={order._id}
-                      className="grid grid-cols-5 p-4 border-t items-center"
+                      className="min-w-[700px] grid grid-cols-5 p-3 border-t text-sm"
                     >
-                      {/* ✅ ORDER ID */}
-                      <span className="font-semibold">
-                        #{order._id.slice(-6).toUpperCase()}
-                      </span>
+                      <span>#{formatOrderId(order._id)}</span>
 
-                      {/* ✅ CUSTOMER */}
                       <span>{order.user?.name || "User"}</span>
 
-                      {/* ✅ ITEMS */}
-                      <div className="text-sm text-gray-600">
-                        {order.orderItems.map((item, index) => (
-                          <div key={index}>
+                      <div className="text-gray-600">
+                        {order.orderItems?.map((item, i) => (
+                          <div key={i}>
                             {item.name} ({item.qty})
                           </div>
                         ))}
                       </div>
 
-                      {/* ✅ TOTAL */}
                       <span>₹{order.totalPrice}</span>
 
-                      {/* ✅ STATUS (SEPARATE COLUMN) */}
                       <span
-                        className={`font-semibold ${order.isDelivered
+                        className={
+                          order.isDelivered
                             ? "text-green-500"
                             : "text-yellow-500"
-                          }`}
+                        }
                       >
                         {order.isDelivered ? "Delivered" : "Pending"}
                       </span>
@@ -153,14 +165,19 @@ const Dashboard = () => {
 
             {/* ================= RECENT USERS ================= */}
             <div>
-              <Text variant="subtitle" className="mb-4">
-                New Users
-              </Text>
+              <div className="flex justify-between items-center mb-4">
+                <Text variant="subtitle">New Users</Text>
 
-              <div className="bg-white shadow rounded overflow-hidden">
+                <Button
+                  variant="primary"
+                  onClick={() => navigate("/admin/users")}
+                >
+                  View All
+                </Button>
+              </div>
 
-                {/* HEADER */}
-                <div className="grid grid-cols-2 bg-gray-100 p-4 font-semibold">
+              <div className="bg-white shadow rounded overflow-x-auto">
+                <div className="min-w-[400px] grid grid-cols-2 bg-gray-100 p-3 font-semibold">
                   <span>Name</span>
                   <span>Email</span>
                 </div>
@@ -171,10 +188,10 @@ const Dashboard = () => {
                   recentUsers.map((user) => (
                     <div
                       key={user._id}
-                      className="grid grid-cols-2 p-4 border-t"
+                      className="min-w-[400px] grid grid-cols-2 p-3 border-t"
                     >
                       <span>{user.name}</span>
-                      <span className="text-gray-500">
+                      <span className="text-gray-500 break-all">
                         {user.email}
                       </span>
                     </div>
