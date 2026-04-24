@@ -1,10 +1,14 @@
 import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 
-// CREATE ORDER
+// ================= CREATE ORDER =================
 export const createOrder = asyncHandler(async (req, res) => {
-  const { orderItems, shippingAddress, paymentMethod, totalPrice } =
-    req.body;
+  const {
+    orderItems,
+    shippingAddress,
+    paymentMethod,
+    totalPrice,
+  } = req.body;
 
   if (!orderItems || orderItems.length === 0) {
     res.status(400);
@@ -23,16 +27,50 @@ export const createOrder = asyncHandler(async (req, res) => {
   res.status(201).json(createdOrder);
 });
 
-// GET ORDERS
+// ================= GET ORDERS (SEARCH + FILTER + PAGINATION) =================
 export const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({})
-    .populate("user", "name email")
-    .sort({ createdAt: -1 });
+  const pageSize = 10;
+  const page = Number(req.query.page) || 1;
 
-  res.json(orders);
+  const keyword = req.query.keyword?.toLowerCase() || "";
+  const status = req.query.status;
+
+  // Base query (status filter)
+  let query = {};
+
+  if (status === "delivered") {
+    query.isDelivered = true;
+  } else if (status === "pending") {
+    query.isDelivered = false;
+  }
+
+  // Count BEFORE pagination
+  const count = await Order.countDocuments(query);
+
+  // Fetch paginated orders
+  let orders = await Order.find(query)
+    .populate("user", "name email")
+    .sort({ createdAt: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  // 🔍 Search filter (after populate)
+  if (keyword) {
+    orders = orders.filter(
+      (order) =>
+        order._id.toString().includes(keyword) ||
+        order.user?.name?.toLowerCase().includes(keyword)
+    );
+  }
+
+  res.json({
+    orders,
+    page,
+    pages: Math.ceil(count / pageSize),
+  });
 });
 
-// UPDATE ORDER STATUS
+// ================= UPDATE STATUS =================
 export const updateOrderStatus = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
@@ -44,11 +82,11 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   order.isDelivered = !order.isDelivered;
   order.deliveredAt = order.isDelivered ? Date.now() : null;
 
-  const updated = await order.save();
-  res.json(updated);
+  const updatedOrder = await order.save();
+  res.json(updatedOrder);
 });
 
-// DELETE ORDER
+// ================= DELETE ORDER =================
 export const deleteOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 

@@ -1,7 +1,8 @@
 import api from "./api";
 
-// GET ALL USERS
-export const getUsers = () => api.get("/users");
+// GET USERS (pagination + search)
+export const getUsers = (page = 1, keyword = "") =>
+  api.get(`/users?page=${page}&keyword=${keyword}`);
 
 // DELETE USER
 export const deleteUser = (id) =>
