@@ -5,7 +5,9 @@ import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+
   const menuRef = useRef(null);
+  const buttonRef = useRef(null); // ✅ NEW
 
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
@@ -16,17 +18,23 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  // ✅ CLOSE ON OUTSIDE CLICK
+  // ✅ FIXED OUTSIDE CLICK
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
         setMenuOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+
     return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
   }, []);
 
   const navItems = [
@@ -42,8 +50,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
 
         {/* LOGO */}
-        <Link to="/" className="text-2xl font-bold text-orange-500">
-          krushnakunj
+        <Link to="/" className="text-4xl font-bold text-orange-500">
+          कृष्णकुंज
         </Link>
 
         {/* DESKTOP MENU */}
@@ -57,8 +65,6 @@ const Navbar = () => {
 
         {/* RIGHT SIDE */}
         <div className="hidden md:flex items-center space-x-3">
-
-          {/* USER INFO */}
           {user ? (
             <div className="flex items-center gap-3">
 
@@ -74,7 +80,6 @@ const Navbar = () => {
                 )}
               </div>
 
-              {/* 🛡 ADMIN BUTTON */}
               {user?.isAdmin && (
                 <Button
                   variant="primary"
@@ -83,7 +88,6 @@ const Navbar = () => {
                   Admin Panel
                 </Button>
               )}
-
 
               <Button variant="primary" onClick={handleLogout}>
                 Logout
@@ -102,10 +106,11 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* MOBILE BUTTON (☰ / ✕) */}
+        {/* MOBILE BUTTON */}
         <button
+          ref={buttonRef} // ✅ IMPORTANT
           className="md:hidden text-2xl"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((prev) => !prev)} // ✅ SAFE TOGGLE
         >
           {menuOpen ? "✕" : "☰"}
         </button>
@@ -115,7 +120,7 @@ const Navbar = () => {
       {menuOpen && (
         <div
           ref={menuRef}
-          className="md:hidden bg-white px-4 pb-4 pt-2 space-y-3 shadow-lg"
+          className="md:hidden bg-white px-4 pb-4 pt-2 space-y-3 shadow-lg transition-all duration-300"
         >
 
           {navItems.map((item) => (

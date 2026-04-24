@@ -14,24 +14,37 @@ import {
 
 const Menu = () => {
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await getProducts();
-        setProducts(data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
 
-    fetchData();
-  }, []);
+      const { data } = await getProducts(page);
+
+      // ✅ FIX pagination response
+      const productList = Array.isArray(data)
+        ? data
+        : data?.products || [];
+
+      setProducts(productList);
+      setPages(data?.pages || 1);
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [page]);
 
   return (
     <div className="pt-16">
@@ -47,47 +60,71 @@ const Menu = () => {
           {loading ? (
             <Text className="text-center">Loading...</Text>
           ) : (
-            <div className="grid md:grid-cols-3 gap-6">
+            <>
+              {/* PRODUCTS GRID */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
 
-              {products.length === 0 ? (
-                <Text className="text-center col-span-3">
-                  No products found
-                </Text>
-              ) : (
-                products.map((item) => (
-                  <Card key={item._id} className="p-4">
+                {products.length === 0 ? (
+                  <Text className="text-center col-span-3">
+                    No products found
+                  </Text>
+                ) : (
+                  products.map((item) => (
+                    <Card key={item._id} className="p-4">
 
-                    {/* IMAGE */}
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-48 object-cover rounded"
-                    />
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-48 object-cover rounded"
+                      />
 
-                    {/* NAME */}
-                    <Text variant="subtitle" className="mt-3">
-                      {item.name}
-                    </Text>
+                      <Text variant="subtitle" className="mt-3">
+                        {item.name}
+                      </Text>
 
-                    {/* PRICE */}
-                    <Text className="text-orange-500 font-bold">
-                      ₹{item.price}
-                    </Text>
+                      <Text className="text-orange-500 font-bold">
+                        ₹{item.price}
+                      </Text>
 
-                    {/* BUTTON */}
-                    <Button
-                      variant="primary"
-                      className="mt-4 w-full"
-                      onClick={() => navigate(`/order/${item._id}`)}
-                    >
-                      Order Now
-                    </Button>
+                      <Button
+                        variant="primary"
+                        className="mt-4 w-full"
+                        onClick={() =>
+                          navigate(`/order/${item._id}`)
+                        }
+                      >
+                        Order Now
+                      </Button>
 
-                  </Card>
-                ))
-              )}
+                    </Card>
+                  ))
+                )}
 
-            </div>
+              </div>
+
+              {/* ✅ PAGINATION */}
+              <div className="flex justify-center items-center mt-8 gap-4">
+
+                <Button
+                  disabled={page === 1}
+                  onClick={() => setPage((prev) => prev - 1)}
+                >
+                  ⬅ Prev
+                </Button>
+
+                <span className="font-medium">
+                  Page {page} of {pages}
+                </span>
+
+                <Button
+                  disabled={page === pages}
+                  onClick={() => setPage((prev) => prev + 1)}
+                >
+                  Next ➡
+                </Button>
+
+              </div>
+            </>
           )}
 
         </Container>

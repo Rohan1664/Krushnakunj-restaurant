@@ -1,13 +1,16 @@
 import API from "./api";
 
-// GET ALL
-export const getProducts = () => API.get("/products");
+// ✅ GET PRODUCTS (pagination + search)
+export const getProducts = (page = 1, keyword = "") =>
+  API.get(`/products?page=${page}&keyword=${keyword}`);
 
 // GET SINGLE
-export const getProductById = (id) => API.get(`/products/${id}`);
+export const getProductById = (id) =>
+  API.get(`/products/${id}`);
 
 // CREATE
-export const createProduct = (data) => API.post("/products", data);
+export const createProduct = (data) =>
+  API.post("/products", data);
 
 // UPDATE
 export const updateProduct = (id, data) =>

@@ -1,13 +1,34 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
 
-// GET ALL
+// ✅ GET ALL WITH PAGINATION + SEARCH
 export const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  const pageSize = 10;
+  const page = Number(req.query.page) || 1;
+  const keyword = req.query.keyword
+    ? {
+        $or: [
+          { name: { $regex: req.query.keyword, $options: "i" } },
+          { description: { $regex: req.query.keyword, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const count = await Product.countDocuments({ ...keyword });
+
+  const products = await Product.find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .sort({ createdAt: -1 });
+
+  res.json({
+    products,
+    page,
+    pages: Math.ceil(count / pageSize),
+  });
 });
 
-// GET SINGLE PRODUCT ⭐ (ADD THIS)
+// GET SINGLE
 export const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
@@ -37,7 +58,7 @@ export const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(createdProduct);
 });
 
-// UPDATE ⭐ (ADD THIS)
+// UPDATE
 export const updateProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 

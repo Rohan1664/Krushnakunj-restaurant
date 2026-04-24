@@ -27,37 +27,46 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const [productsRes, ordersRes, usersRes] = await Promise.all([
-          getProducts(),
+          getProducts(), // paginated now
           getOrders(),
           getUsers(),
         ]);
 
-        const products = productsRes.data || [];
+        // ================= PRODUCTS =================
+        const productsData = productsRes.data;
 
-        // ✅ FIX ORDERS
+        const products = Array.isArray(productsData)
+          ? productsData
+          : productsData?.products || [];
+
+        const totalProducts =
+          productsData?.totalProducts || products.length;
+
+        // ================= ORDERS =================
         const orders = Array.isArray(ordersRes.data)
           ? ordersRes.data
           : ordersRes.data?.orders || [];
 
-        // ✅ FIX USERS (MAIN FIX)
+        // ================= USERS =================
         const users = Array.isArray(usersRes.data)
           ? usersRes.data
           : usersRes.data?.users || [];
 
-        // 💰 revenue
+        // ================= REVENUE =================
         const revenue = orders.reduce(
           (total, order) => total + (order.totalPrice || 0),
           0
         );
 
+        // ================= SET STATE =================
         setStats({
-          products: products.length,
+          products: totalProducts, // ✅ FIXED
           orders: orders.length,
           users: users.length,
           revenue,
         });
 
-        // ✅ latest 10
+        // latest 10
         setRecentOrders(orders.slice(-10).reverse());
         setRecentUsers(users.slice(-10).reverse());
 
@@ -109,10 +118,7 @@ const Dashboard = () => {
               <div className="flex justify-between items-center mb-4">
                 <Text variant="subtitle">Recent Orders</Text>
 
-                <Button
-                  variant="primary"
-                  onClick={() => navigate("/admin/orders")}
-                >
+                <Button onClick={() => navigate("/admin/orders")}>
                   View All
                 </Button>
               </div>
@@ -135,7 +141,6 @@ const Dashboard = () => {
                       className="min-w-[700px] grid grid-cols-5 p-3 border-t text-sm"
                     >
                       <span>#{formatOrderId(order._id)}</span>
-
                       <span>{order.user?.name || "User"}</span>
 
                       <div className="text-gray-600">
@@ -168,10 +173,7 @@ const Dashboard = () => {
               <div className="flex justify-between items-center mb-4">
                 <Text variant="subtitle">New Users</Text>
 
-                <Button
-                  variant="primary"
-                  onClick={() => navigate("/admin/users")}
-                >
+                <Button onClick={() => navigate("/admin/users")}>
                   View All
                 </Button>
               </div>
