@@ -15,7 +15,7 @@ const Container = ({
 
   const variants = {
     transparent: "",
-    primary: "bg-[#f3f0e6]",
+    primary: "bg-[#f3f0e6]" ,
   };
 
   return (

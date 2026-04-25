@@ -22,7 +22,7 @@ const Testimonials = () => {
       <Container >
 
         {/* HEADER */}
-        <Text variant="title" color="dark" className="mb-10">
+        <Text variant="title" color="light" className="mb-10">
           What Our Customers Say
         </Text>
 

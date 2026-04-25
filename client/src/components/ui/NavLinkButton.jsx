@@ -12,11 +12,7 @@ const NavLinkButton = ({
     "transition font-medium";
 
   const variants = {
-    default: "text-gray-700 hover:text-orange-500",
-    pill:
-      "px-3 py-1 rounded-full hover:bg-orange-100 text-gray-700 hover:text-orange-600",
-    underline:
-      "text-gray-700 hover:text-orange-500 border-b-2 border-transparent hover:border-orange-500",
+    default: "text-red-800 hover:text-red-900 bg-transparent",
   };
 
   return (

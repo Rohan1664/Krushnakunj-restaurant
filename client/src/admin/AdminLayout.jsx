@@ -11,13 +11,13 @@ const AdminLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
 
-      {/* TOP NAVBAR */}
+      {/* NAVBAR */}
       <Navbar />
 
       {/* MAIN AREA */}
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1">
 
-        {/* BACKDROP (ONLY MOBILE) */}
+        {/* ✅ MOBILE BACKDROP */}
         {open && (
           <div
             className="fixed inset-0 bg-black/50 z-30 md:hidden"
@@ -25,14 +25,15 @@ const AdminLayout = () => {
           />
         )}
 
-        {/* SIDEBAR */}
+        {/* ✅ SIDEBAR */}
         <div
           className={`
-            fixed md:relative
+            fixed md:full
             top-20 md:top-0
             left-0
             z-40
-            h-full md:h-auto
+            w-64
+            h-[calc(100vh-80px)] md:h-auto
             transform transition-transform duration-300
             ${open ? "translate-x-0" : "-translate-x-full"}
             md:translate-x-0
@@ -41,24 +42,28 @@ const AdminLayout = () => {
           <AdminSidebar onClose={() => setOpen(false)} />
         </div>
 
-        {/* CONTENT */}
-        <div className="flex-1 w-full p-4 md:p-6 bg-gray-100">
+        {/* ✅ CONTENT */}
+        <div className="flex-1 w-full bg-[#f3f0e6] p-4 md:p-6 mt-10">
 
-          {/* MOBILE TOGGLE */}
+          {/* MOBILE MENU BUTTON */}
           <button
-            className="md:hidden fixed top-20 right-4 z-50  text-black px-3 py-2 rounded shadow"
-            onClick={() => setOpen(!open)}
+            className="md:hidden fixed top-20 right-4 z-50 bg-white px-3 py-2 rounded shadow"
+            onClick={() => setOpen((prev) => !prev)}
           >
             {open ? "✕" : "☰"}
           </button>
 
-          <Outlet />
+          {/* PAGE CONTENT */}
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
+
         </div>
 
       </div>
 
       {/* FOOTER */}
-      <Footer />
+      {/*<Footer /> */}
 
     </div>
   );

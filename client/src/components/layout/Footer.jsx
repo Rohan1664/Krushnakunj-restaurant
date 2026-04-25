@@ -4,7 +4,7 @@ import { Section, Text, Container } from "../ui";
 
 const Footer = () => {
   return (
-    <Section variant="primary" className="py-10 mt-10">
+    <Section variant="primary" className="py-10 ">
       
       <Container size="lg">
 
@@ -27,7 +27,7 @@ const Footer = () => {
               Quick Links
             </Text>
 
-            <div className="space-y-2">
+            <Text variant="small" color="muted" className="space-y-2">
               <Text as="p" color="muted">
                 <Link to="/">Home</Link>
               </Text>
@@ -43,7 +43,7 @@ const Footer = () => {
               <Text as="p" color="muted">
                 <Link to="/contact">Contact</Link>
               </Text>
-            </div>
+            </Text>
           </div>
 
           {/* CONTACT */}

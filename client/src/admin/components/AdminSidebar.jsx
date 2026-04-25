@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Text, Button } from "../../components/ui";
+import { Text, Button, Section, NavLinkButton } from "../../components/ui";
 
 const AdminSidebar = ({ onClose }) => {
   const navigate = useNavigate();
@@ -11,59 +11,60 @@ const AdminSidebar = ({ onClose }) => {
   };
 
   const linkClass = ({ isActive }) =>
-    `block px-4 py-2 rounded transition ${isActive
-      ? "bg-orange-500 text-white"
-      : "text-gray-300 hover:bg-gray-700"
-    }`;
+    `
+    block px-4 py-2 rounded-md transition font-medium
+    ${
+      isActive
+        ? "bg-[#C62828] text-white"
+        : "text-gray-300 hover:bg-white-800 hover:text-white"
+    }
+  `;
 
   return (
-    <div
-      className="
-      w-64 bg-gray-900 text-white
-      max-h-[200vh] md:h-screen
-      flex flex-col"
-
+    <Section variant="primary"
+      className=" w-64 max-h-[200vh] md:h-screen flex flex-col"
     >
       {/* HEADER */}
       <div className="p-6 border-b border-gray-700">
-        <Text variant="title" className="text-orange-500">
+        <Text variant="subtitle" color="light">
           Admin Panel
         </Text>
       </div>
 
       {/* NAV */}
       <nav className="flex-1 space-y-2 px-4 py-4 overflow-y-auto">
-        <NavLink to="/admin/dashboard" className={linkClass} onClick={onClose}>
+        <NavLinkButton to="/admin/dashboard" variant="default" className={linkClass} onClick={onClose}>
           Dashboard
-        </NavLink>
+        </NavLinkButton>
 
-        <NavLink to="/admin/products" className={linkClass} onClick={onClose}>
+        <NavLinkButton to="/admin/products" variant="default" className={linkClass} onClick={onClose}>
           Products
-        </NavLink>
+        </NavLinkButton>
 
-        <NavLink to="/admin/add-product" className={linkClass} onClick={onClose}>
+        <NavLinkButton to="/admin/add-product" variant="default" className={linkClass} onClick={onClose}>
           Add Product
-        </NavLink>
+        </NavLinkButton>
 
-        <NavLink to="/admin/orders" className={linkClass} onClick={onClose}>
+        <NavLinkButton to="/admin/orders" variant="default" className={linkClass} onClick={onClose}>
           Orders
-        </NavLink>
+        </NavLinkButton>
 
-        <NavLink to="/admin/users" className={linkClass} onClick={onClose}>
+        <NavLinkButton to="/admin/users" variant="default" className={linkClass} onClick={onClose}>
           Users
-        </NavLink>
+        </NavLinkButton>
       </nav>
 
       {/* LOGOUT */}
       <div className="p-4 border-t border-gray-700">
         <Button
+          variant="primary"
+          className="w-full"
           onClick={handleLogout}
-          className="w-full bg-red-500 hover:bg-red-600 text-white"
         >
           Logout
         </Button>
       </div>
-    </div>
+    </Section>
   );
 };
 

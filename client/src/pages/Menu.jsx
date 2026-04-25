@@ -27,7 +27,6 @@ const Menu = () => {
 
       const { data } = await getProducts(page);
 
-      // ✅ FIX pagination response
       const productList = Array.isArray(data)
         ? data
         : data?.products || [];
@@ -54,38 +53,56 @@ const Menu = () => {
         bgImage="/images/hero/menu.jpg"
       />
 
-      <Section className="bg-gray-100">
-        <Container>
+      {/* ✅ USE SECTION VARIANT INSTEAD OF RAW BG */}
+      <Section variant="primary">
+        <Container size="lg">
 
           {loading ? (
-            <Text className="text-center">Loading...</Text>
+            <Text className="text-center" color="muted">
+              Loading...
+            </Text>
           ) : (
             <>
               {/* PRODUCTS GRID */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
 
                 {products.length === 0 ? (
-                  <Text className="text-center col-span-3">
+                  <Text
+                    className="text-center col-span-3"
+                    color="muted"
+                  >
                     No products found
                   </Text>
                 ) : (
                   products.map((item) => (
                     <Card key={item._id} className="p-4">
 
+                      {/* IMAGE */}
                       <img
                         src={item.image}
                         alt={item.name}
                         className="w-full h-48 object-cover rounded"
                       />
 
-                      <Text variant="subtitle" className="mt-3">
+                      {/* NAME */}
+                      <Text
+                        variant="subtitle"
+                        className="mt-3"
+                        color="dark"
+                      >
                         {item.name}
                       </Text>
 
-                      <Text className="text-orange-500 font-bold">
+                      {/* PRICE */}
+                      <Text
+                        variant="base"
+                        color="primary"
+                        className="font-bold mt-1"
+                      >
                         ₹{item.price}
                       </Text>
 
+                      {/* BUTTON */}
                       <Button
                         variant="primary"
                         className="mt-4 w-full"
@@ -102,8 +119,8 @@ const Menu = () => {
 
               </div>
 
-              {/* ✅ PAGINATION */}
-              <div className="flex justify-center items-center mt-8 gap-4">
+              {/* PAGINATION */}
+              <div className="flex justify-center items-center mt-10 gap-4">
 
                 <Button
                   disabled={page === 1}
@@ -112,9 +129,9 @@ const Menu = () => {
                   ⬅ Prev
                 </Button>
 
-                <span className="font-medium">
+                <Text variant="base" color="dark">
                   Page {page} of {pages}
-                </span>
+                </Text>
 
                 <Button
                   disabled={page === pages}

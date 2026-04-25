@@ -1,5 +1,5 @@
 import React from "react";
-import { Card ,Section} from "../ui";
+import { Card ,Section,Text} from "../ui";
 
 const features = [
   {
@@ -26,7 +26,9 @@ const features = [
 const WhyChooseUs = () => {
   return (
     <Section className="py-16 bg-gray-100 text-center" variant="primary">
-      <h2 className="text-3xl font-bold mb-10">Why Choose Us</h2>
+      <Text variant="title" color="light" className="mb-10">
+        Why Choose Us
+      </Text>
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-6 px-4">
         {features.map((item, index) => (

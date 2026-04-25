@@ -39,7 +39,7 @@ const PopularDishes = () => {
         {/* HEADER */}
         <div className="flex justify-between items-center mb-10">
 
-          <Text variant="subtitle" color="dark">
+          <Text variant="title" color="light">
             Popular Dishes
           </Text>
 

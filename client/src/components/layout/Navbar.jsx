@@ -49,13 +49,13 @@ const Navbar = () => {
 
         {/* LOGO (NOW USING TEXT UI) */}
         <Link to="/">
-          <Text variant="title" color2="red" >
+          <Text variant="title" color="light" >
             कृष्णकुंज
           </Text>
         </Link>
 
         {/* DESKTOP MENU */}
-        <div className="hidden md:flex space-x-6 items-center">
+        <Text variant="base" color="light" className="hidden md:flex space-x-6 items-center">
           {navItems.map((item) => (
             <NavLinkButton
               key={item.to}
@@ -65,7 +65,7 @@ const Navbar = () => {
               {item.name}
             </NavLinkButton>
           ))}
-        </div>
+        </Text>
 
         {/* RIGHT SIDE */}
         <div className="hidden md:flex items-center space-x-3">
