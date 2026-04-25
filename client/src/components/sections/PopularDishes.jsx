@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProducts } from "../../services/productService";
 
-import { Button } from "../ui";
+import {
+  Button,
+  Text,
+  Card,
+  Container,
+  Section,
+} from "../ui";
 
 const PopularDishes = () => {
   const [dishes, setDishes] = useState([]);
@@ -13,14 +19,11 @@ const PopularDishes = () => {
       try {
         const { data } = await getProducts();
 
-        // ✅ FIX: handle paginated response
         const productList = Array.isArray(data)
           ? data
           : data?.products || [];
 
-        // ✅ take first 5
         setDishes(productList.slice(0, 5));
-
       } catch (error) {
         console.log("Error fetching products", error);
       }
@@ -30,54 +33,75 @@ const PopularDishes = () => {
   }, []);
 
   return (
-    <section className="py-16 bg-white text-center">
+    <Section className="bg-white text-center py-16" variant="primary">
+      <Container>
 
-      {/* HEADER */}
-      <div className="max-w-6xl mx-auto px-4 flex justify-between items-center mb-10">
-        <h2 className="text-3xl font-bold">Popular Dishes</h2>
+        {/* HEADER */}
+        <div className="flex justify-between items-center mb-10">
 
-        <Button onClick={() => navigate("/menu")} variant="primary">
-          View Menu
-        </Button>
-      </div>
+          <Text variant="subtitle" color="dark">
+            Popular Dishes
+          </Text>
 
-      {/* GRID */}
-      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 px-4">
-        {dishes.length === 0 ? (
-          <p className="col-span-4 text-gray-500">No dishes found</p>
-        ) : (
-          dishes.map((dish) => (
-            <div
-              key={dish._id}
-              className="bg-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition"
-            >
-              <img
-                src={dish.image}
-                alt={dish.name}
-                className="w-full h-48 object-cover"
-              />
+          <Button onClick={() => navigate("/menu")}>
+            View Menu
+          </Button>
 
-              <div className="p-4">
-                <h3 className="text-lg font-semibold">{dish.name}</h3>
+        </div>
 
-                <p className="text-orange-500 font-bold mt-2">
-                  ₹{dish.price}
-                </p>
+        {/* GRID */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
 
-                <Button
-                  variant="primary"
-                  className="mt-4 w-full"
-                  onClick={() => navigate(`/order/${dish._id}`)}
-                >
-                  Order Now
-                </Button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+          {dishes.length === 0 ? (
+            <Text color="muted" className="col-span-4">
+              No dishes found
+            </Text>
+          ) : (
+            dishes.map((dish) => (
+              <Card
+                key={dish._id}
+                className="overflow-hidden hover:shadow-lg transition"
+              >
 
-    </section>
+                {/* IMAGE */}
+                <img
+                  src={dish.image}
+                  alt={dish.name}
+                  className="w-full h-40 md:h-48 object-cover"
+                />
+
+                {/* CONTENT */}
+                <div className="p-4">
+
+                  <Text variant="subtitle" color="dark" className="text-left">
+                    {dish.name}
+                  </Text>
+
+                  <Text
+                    color="dark"
+                    className="mt-2 text-left font-bold"
+                  >
+                    ₹{dish.price}
+                  </Text>
+
+                  <Button
+                    className="mt-4 w-full"
+                    onClick={() =>
+                      navigate(`/order/${dish._id}`)
+                    }
+                  >
+                    Order Now
+                  </Button>
+
+                </div>
+              </Card>
+            ))
+          )}
+
+        </div>
+
+      </Container>
+    </Section>
   );
 };
 

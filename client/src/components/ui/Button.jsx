@@ -1,5 +1,4 @@
 import React from "react";
-import { theme } from "../../styles/theme";
 
 const Button = ({
   children,
@@ -7,40 +6,22 @@ const Button = ({
   onClick,
   className = "",
   type = "button",
+  disabled = false,
 }) => {
-  const styles = {
-    primary: {
-      background: theme.colors.primary,
-      color: "#fff",
-    },
-    dark: {
-      background: theme.colors.dark,
-      color: "#fff",
-    },
-    outline: {
-      background: "transparent",
-      border: "2px solid #ddd",
-      color: "#ffffff",
-    },
-    danger: {
-      background: theme.colors.danger,
-      color: "#fff",
-    },
+  const base =
+    "px-4 py-2 rounded-md font-medium transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
+
+ const variants = {
+   primary: "bg-[#C62828] text-[#FAF9F6] hover:bg-[#C62828]",
+
   };
 
   return (
     <button
       type={type}
       onClick={onClick}
-      className={className}
-      style={{
-        padding: "10px 16px",
-        borderRadius: theme.radius.md,
-        cursor: "pointer",
-        border: "none",
-        transition: "0.2s",
-        ...styles[variant],
-      }}
+      disabled={disabled}
+      className={`${base} ${variants[variant]} ${className}`}
     >
       {children}
     </button>

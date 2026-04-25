@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "../ui";
+import { Card ,Section} from "../ui";
 
 const features = [
   {
@@ -25,7 +25,7 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="py-16 bg-gray-100 text-center">
+    <Section className="py-16 bg-gray-100 text-center" variant="primary">
       <h2 className="text-3xl font-bold mb-10">Why Choose Us</h2>
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-6 px-4">
@@ -43,7 +43,7 @@ const WhyChooseUs = () => {
           </Card>
         ))}
       </div>
-    </section>
+    </Section>
   );
 };
 

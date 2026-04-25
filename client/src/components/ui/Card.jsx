@@ -6,7 +6,7 @@ const Card = ({ children, className = "" }) => {
     <div
       className={className}
       style={{
-        background: "#fff",
+        background: "#f6f3ec",
         borderRadius: theme.radius.lg,
         boxShadow: theme.shadow.md,
         overflow: "hidden",

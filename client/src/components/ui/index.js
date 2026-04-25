@@ -11,3 +11,4 @@ export { default as Textarea } from "./Textarea";
 export { default as Select } from "./Select";
 export { default as LinkButton } from "./LinkButton";
 export { default as ImageCard } from "./ImageCard";
+export { default as Nav } from "./Nav";

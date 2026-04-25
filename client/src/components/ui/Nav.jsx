@@ -1,26 +1,27 @@
 import React from "react";
 
-const Section = ({
+const Nav = ({
   children,
+  variant = "primary", 
   className = "",
-  variant = "primary", // white | gray | primary | dark | transparent
+  fixed = true,
 }) => {
   const variants = {
-    transparent: "",
     primary: "bg-[#f3f0e6]",
   };
 
   return (
-    <section
+    <nav
       className={`
-        py-16
+        w-full z-50
+        ${fixed ? "fixed top-0 left-0" : ""}
         ${variants[variant]}
         ${className}
       `}
     >
       {children}
-    </section>
+    </nav>
   );
 };
 
-export default Section;
+export default Nav;

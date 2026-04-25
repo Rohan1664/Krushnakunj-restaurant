@@ -1,14 +1,39 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const NavLinkButton = ({ to, children, className = "" }) => {
+const NavLinkButton = ({
+  to,
+  children,
+  className = "",
+  variant = "default", // default | pill | underline
+  onClick,
+}) => {
+  const baseStyle =
+    "transition font-medium";
+
+  const variants = {
+    default: "text-gray-700 hover:text-orange-500",
+    pill:
+      "px-3 py-1 rounded-full hover:bg-orange-100 text-gray-700 hover:text-orange-600",
+    underline:
+      "text-gray-700 hover:text-orange-500 border-b-2 border-transparent hover:border-orange-500",
+  };
+
   return (
-    <Link
+    <NavLink
       to={to}
-      className={`text-gray-700 hover:text-orange-500 transition ${className}`}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `
+        ${baseStyle}
+        ${variants[variant]}
+        ${isActive ? "text-orange-500 font-semibold" : ""}
+        ${className}
+        `
+      }
     >
       {children}
-    </Link>
+    </NavLink>
   );
 };
 

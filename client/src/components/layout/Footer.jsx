@@ -1,67 +1,83 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Section, Text, Container } from "../ui";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white mt-10">
+    <Section variant="primary" className="py-10 mt-10">
+      
+      <Container size="lg">
 
-      <div className="
-        max-w-7xl mx-auto px-4
-        py-6 md:py-10
-        grid gap-6 md:gap-8
-        grid-cols-1 md:grid-cols-3
-      ">
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-3">
 
-        {/* Brand */}
-        <div>
-          <h2 className="text-xl md:text-2xl font-bold text-orange-500">
-            krushnakunj
-          </h2>
+          {/* BRAND */}
+          <div>
+            <Text variant="subtitle" color="light" as="h1">
+              krushnakunj
+            </Text>
 
-          <p className="mt-2 md:mt-3 text-sm md:text-base text-gray-400">
-            Delicious food delivered to your doorstep. Fresh, fast, and tasty!
-          </p>
-        </div>
-
-        {/* Quick Links */}
-        <div>
-          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
-            Quick Links
-          </h3>
-
-          <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-gray-400">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/menu">Menu</Link></li>
-            <li><Link to="/about">About</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-          </ul>
-        </div>
-
-        {/* Contact */}
-        <div>
-          <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3">
-            Contact
-          </h3>
-
-          <div className="text-sm md:text-base text-gray-400 space-y-1">
-            <p>Email: support@krushnakunj.com</p>
-            <p>Phone: +91 98765 43210</p>
-            <p>Location: India</p>
+            <Text variant="small" color="muted" className="mt-3">
+              Delicious food delivered to your doorstep. Fresh, fast, and tasty!
+            </Text>
           </div>
+
+          {/* QUICK LINKS */}
+          <div>
+            <Text variant="subtitle" color="light" as="h3" className="mb-3">
+              Quick Links
+            </Text>
+
+            <div className="space-y-2">
+              <Text as="p" color="muted">
+                <Link to="/">Home</Link>
+              </Text>
+
+              <Text as="p" color="muted">
+                <Link to="/menu">Menu</Link>
+              </Text>
+
+              <Text as="p" color="muted">
+                <Link to="/about">About</Link>
+              </Text>
+
+              <Text as="p" color="muted">
+                <Link to="/contact">Contact</Link>
+              </Text>
+            </div>
+          </div>
+
+          {/* CONTACT */}
+          <div>
+            <Text variant="subtitle" color="light" as="h3" className="mb-3">
+              Contact
+            </Text>
+
+            <div className="space-y-2">
+              <Text variant="small" color="muted">
+                Email: support@krushnakunj.com
+              </Text>
+
+              <Text variant="small" color="muted">
+                Phone: +91 98765 43210
+              </Text>
+
+              <Text variant="small" color="muted">
+                Location: India
+              </Text>
+            </div>
+          </div>
+
         </div>
 
-      </div>
+        {/* BOTTOM */}
+        <div className="border-t border-gray-700 mt-8 pt-4 text-center">
+          <Text variant="small" color="muted">
+            © {new Date().getFullYear()} krushnakunj. All rights reserved.
+          </Text>
+        </div>
 
-      {/* Bottom */}
-      <div className="
-        text-center text-xs md:text-sm
-        py-3 md:py-4
-        border-t border-gray-700 text-gray-500
-      ">
-        © {new Date().getFullYear()} krushnakunj. All rights reserved.
-      </div>
-
-    </footer>
+      </Container>
+    </Section>
   );
 };
 

@@ -1,28 +1,26 @@
 import React from "react";
 
-const Loader = () => {
-  return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <div
-        style={{
-          width: "30px",
-          height: "30px",
-          border: "3px solid #f97316",
-          borderTop: "3px solid transparent",
-          borderRadius: "50%",
-          animation: "spin 1s linear infinite",
-          margin: "auto",
-        }}
-      />
+const Loader = ({
+  size = "md", // sm | md | lg
+  color = "#f97316",
+  fullScreen = false,
+}) => {
+  const sizes = {
+    sm: "w-5 h-5",
+    md: "w-8 h-8",
+    lg: "w-12 h-12",
+  };
 
-      <style>
-        {`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}
-      </style>
+  return (
+    <div
+      className={`flex items-center justify-center ${
+        fullScreen ? "h-screen w-full" : "p-4"
+      }`}
+    >
+      <div
+        className={`${sizes[size]} border-4 border-t-transparent rounded-full animate-spin`}
+        style={{ borderColor: color, borderTopColor: "transparent" }}
+      />
     </div>
   );
 };

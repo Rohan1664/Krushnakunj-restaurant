@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, NavLinkButton } from "../ui";
+import { Button, NavLinkButton, Text, Container,Nav  } from "../ui";
 import { AuthContext } from "../../context/AuthContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuRef = useRef(null);
-  const buttonRef = useRef(null); // ✅ NEW
+  const buttonRef = useRef(null);
 
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
@@ -18,7 +18,7 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  // ✅ FIXED OUTSIDE CLICK
+  // CLOSE ON OUTSIDE CLICK
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -32,9 +32,7 @@ const Navbar = () => {
     };
 
     document.addEventListener("click", handleClickOutside);
-
-    return () =>
-      document.removeEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   const navItems = [
@@ -46,18 +44,24 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-md fixed w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <Nav variant="primary" className="fixed w-full z-50">
+      <Container size="lg" className="py-3 flex justify-between items-center">
 
-        {/* LOGO */}
-        <Link to="/" className="text-4xl font-bold text-orange-500">
-          कृष्णकुंज
+        {/* LOGO (NOW USING TEXT UI) */}
+        <Link to="/">
+          <Text variant="title" color2="red" >
+            कृष्णकुंज
+          </Text>
         </Link>
 
         {/* DESKTOP MENU */}
         <div className="hidden md:flex space-x-6 items-center">
           {navItems.map((item) => (
-            <NavLinkButton key={item.to} to={item.to}>
+            <NavLinkButton
+              key={item.to}
+              to={item.to}
+              variant="default"
+            >
               {item.name}
             </NavLinkButton>
           ))}
@@ -65,21 +69,23 @@ const Navbar = () => {
 
         {/* RIGHT SIDE */}
         <div className="hidden md:flex items-center space-x-3">
-          {user ? (
-            <div className="flex items-center gap-3">
 
+          {user ? (
+            <>
+              {/* USER INFO */}
               <div className="text-right">
-                <p className="font-semibold text-gray-700">
+                <Text variant="base" className="font-semibold text-gray-700">
                   {user.name}
-                </p>
+                </Text>
 
                 {user.isAdmin && (
-                  <p className="text-xs text-orange-500 font-bold">
+                  <Text variant="small" className="text-orange-500 font-bold">
                     ADMIN
-                  </p>
+                  </Text>
                 )}
               </div>
 
+              {/* ADMIN BUTTON */}
               {user?.isAdmin && (
                 <Button
                   variant="primary"
@@ -92,7 +98,7 @@ const Navbar = () => {
               <Button variant="primary" onClick={handleLogout}>
                 Logout
               </Button>
-            </div>
+            </>
           ) : (
             <>
               <Link to="/login">
@@ -108,21 +114,20 @@ const Navbar = () => {
 
         {/* MOBILE BUTTON */}
         <button
-          ref={buttonRef} // ✅ IMPORTANT
+          ref={buttonRef}
           className="md:hidden text-2xl"
-          onClick={() => setMenuOpen((prev) => !prev)} // ✅ SAFE TOGGLE
+          onClick={() => setMenuOpen((prev) => !prev)}
         >
           {menuOpen ? "✕" : "☰"}
         </button>
-      </div>
+      </Container>
 
       {/* MOBILE MENU */}
       {menuOpen && (
         <div
           ref={menuRef}
-          className="md:hidden bg-white px-4 pb-4 pt-2 space-y-3 shadow-lg transition-all duration-300"
+          className="md:hidden bg-white px-4 pb-4 pt-2 space-y-3 shadow-lg"
         >
-
           {navItems.map((item) => (
             <NavLinkButton
               key={item.to}
@@ -136,8 +141,9 @@ const Navbar = () => {
 
           {user ? (
             <div className="space-y-2 pt-2 border-t">
-
-              <p className="font-semibold text-gray-700">{user.name}</p>
+              <Text variant="base" className="font-semibold">
+                {user.name}
+              </Text>
 
               {user?.isAdmin && (
                 <Button
@@ -177,7 +183,7 @@ const Navbar = () => {
           )}
         </div>
       )}
-    </nav>
+    </Nav>
   );
 };
 
