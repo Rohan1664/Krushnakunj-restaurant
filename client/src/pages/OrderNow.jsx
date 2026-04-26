@@ -10,7 +10,7 @@ import {
   Input,
 } from "../components/ui";
 
-import { getProducts } from "../services/productService";
+import { getProductById } from "../services/productService";
 import { createOrder } from "../services/orderService";
 
 const OrderNow = () => {
@@ -20,7 +20,6 @@ const OrderNow = () => {
   const [product, setProduct] = useState(null);
   const [qty, setQty] = useState(1);
 
-  // ✅ USER ADDRESS STATE
   const [address, setAddress] = useState({
     address: "",
     city: "",
@@ -28,13 +27,11 @@ const OrderNow = () => {
     country: "India",
   });
 
-  // FETCH PRODUCT
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await getProducts();
-        const selected = data.find((p) => p._id === id);
-        setProduct(selected);
+        const { data } = await getProductById(id);
+        setProduct(data);
       } catch (error) {
         console.log(error);
       }
@@ -43,7 +40,6 @@ const OrderNow = () => {
     fetchProduct();
   }, [id]);
 
-  // HANDLE ADDRESS CHANGE
   const handleAddressChange = (e) => {
     setAddress({
       ...address,
@@ -51,9 +47,7 @@ const OrderNow = () => {
     });
   };
 
-  // PLACE ORDER
   const handleOrder = async () => {
-    // ✅ VALIDATION
     if (
       !address.address ||
       !address.city ||
@@ -70,7 +64,7 @@ const OrderNow = () => {
           {
             name: product.name,
             qty: Number(qty),
-            image: product.image || "https://via.placeholder.com/150",
+            image: product.image,
             price: product.price,
             product: product._id,
           },
@@ -90,7 +84,14 @@ const OrderNow = () => {
     }
   };
 
-  if (!product) return <p className="p-10">Loading...</p>;
+  if (!product)
+    return (
+      <Section>
+        <Container>
+          <Text className="text-center">Loading...</Text>
+        </Container>
+      </Section>
+    );
 
   return (
     <div className="pt-16">
@@ -100,23 +101,23 @@ const OrderNow = () => {
         bgImage="/images/hero/menu.jpg"
       />
 
-      <Section className="bg-gray-100">
+      <Section variant="primary">
         <Container className="flex justify-center">
 
           <div className="bg-white p-6 rounded shadow w-full max-w-md space-y-4">
 
-            {/* PRODUCT */}
             <img
               src={product.image}
               alt={product.name}
               className="w-full h-48 object-cover rounded"
             />
 
-            <Text variant="title">{product.name}</Text>
+            <Text variant="title" color="dark">
+              {product.name}
+            </Text>
 
-            <Text>Price: ₹{product.price}</Text>
+            <Text color="dark">₹{product.price}</Text>
 
-            {/* QUANTITY */}
             <Input
               type="number"
               min="1"
@@ -124,48 +125,18 @@ const OrderNow = () => {
               onChange={(e) => setQty(e.target.value)}
             />
 
-            {/* ✅ ADDRESS FORM */}
             <Text variant="subtitle">Delivery Address</Text>
 
-            <Input
-              name="address"
-              placeholder="Street Address"
-              value={address.address}
-              onChange={handleAddressChange}
-            />
+            <Input name="address" placeholder="Street Address" onChange={handleAddressChange} />
+            <Input name="city" placeholder="City" onChange={handleAddressChange} />
+            <Input name="postalCode" placeholder="Postal Code" onChange={handleAddressChange} />
+            <Input name="country" placeholder="Country" value={address.country} onChange={handleAddressChange} />
 
-            <Input
-              name="city"
-              placeholder="City"
-              value={address.city}
-              onChange={handleAddressChange}
-            />
-
-            <Input
-              name="postalCode"
-              placeholder="Postal Code"
-              value={address.postalCode}
-              onChange={handleAddressChange}
-            />
-
-            <Input
-              name="country"
-              placeholder="Country"
-              value={address.country}
-              onChange={handleAddressChange}
-            />
-
-            {/* TOTAL */}
             <Text variant="subtitle">
               Total: ₹{product.price * qty}
             </Text>
 
-            {/* BUTTON */}
-            <Button
-              variant="primary"
-              className="w-full"
-              onClick={handleOrder}
-            >
+            <Button className="w-full" onClick={handleOrder}>
               Place Order
             </Button>
 

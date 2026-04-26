@@ -7,7 +7,7 @@ const Section = ({
 }) => {
   const variants = {
     transparent: "",
-    primary: "bg-[#f3f0e6]",
+    primary: "bg-[#f6f3ec]",
   };
 
   return (

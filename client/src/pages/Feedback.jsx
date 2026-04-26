@@ -42,7 +42,7 @@ const Feedback = () => {
       <Header
         title="Feedback"
         subtitle="Share your experience with us"
-        bgImage="/images/hero/feedback.jpg"
+        bgImage="/images/hero/hero.png"
       />
 
       <Section className="bg-white">

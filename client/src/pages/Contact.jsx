@@ -44,7 +44,7 @@ const Contact = () => {
       <Header
         title="Contact Us"
         subtitle="We’d love to hear from you"
-        bgImage="/images/hero/contact.jpg"
+        bgImage="/images/hero/hero.png"
       />
 
       {/* Contact Section */}

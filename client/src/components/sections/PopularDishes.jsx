@@ -23,7 +23,7 @@ const PopularDishes = () => {
           ? data
           : data?.products || [];
 
-        setDishes(productList.slice(0, 5));
+        setDishes(productList.slice(0, 2));
       } catch (error) {
         console.log("Error fetching products", error);
       }
@@ -33,69 +33,81 @@ const PopularDishes = () => {
   }, []);
 
   return (
-    <Section className="bg-white text-center py-16" variant="primary">
-      <Container>
+    <Section variant="primary" className="py-16">
+      <Container size="lg">
 
         {/* HEADER */}
         <div className="flex justify-between items-center mb-10">
-
-          <Text variant="title" color="light">
+          <Text variant="title" color="dark">
             Popular Dishes
           </Text>
 
           <Button onClick={() => navigate("/menu")}>
             View Menu
           </Button>
-
         </div>
 
-        {/* GRID */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        {/* LIST STYLE (LIKE IMAGE) */}
+        <div className="space-y-6">
 
           {dishes.length === 0 ? (
-            <Text color="muted" className="col-span-4">
-              No dishes found
-            </Text>
+            <Text color="muted">No dishes found</Text>
           ) : (
-            dishes.map((dish) => (
-              <Card
-                key={dish._id}
-                className="overflow-hidden hover:shadow-lg transition"
-              >
+            dishes.map((dish, index) => {
+              const isReverse = index % 2 !== 0;
 
-                {/* IMAGE */}
-                <img
-                  src={dish.image}
-                  alt={dish.name}
-                  className="w-full h-40 md:h-48 object-cover"
-                />
+              return (
+                <Card
+                  key={dish._id}
+                  className={`
+                    flex flex-col md:flex-row
+                    ${isReverse ? "md:flex-row-reverse" : ""}
+                    overflow-hidden
+                  `}
+                  size="lg"
+                >
 
-                {/* CONTENT */}
-                <div className="p-4">
+                  {/* IMAGE */}
+                  <div className="md:w-1/2 flex items-center justify-center bg-gray-100">
+                    <img
+                      src={dish.image}
+                      alt={dish.name}
+                      className="w-full h-full max-h-80 object-contain"
+                    />
+                  </div>
 
-                  <Text variant="subtitle" color="dark" className="text-left">
-                    {dish.name}
-                  </Text>
+                  {/* CONTENT */}
+                  <div className="md:w-1/2 p-8 md:p-14 flex flex-col justify-center text-left">
 
-                  <Text
-                    color="dark"
-                    className="mt-2 text-left font-bold"
-                  >
-                    ₹{dish.price}
-                  </Text>
+                    <Text variant="subtitle" color="dark">
+                      {dish.name}
+                    </Text>
 
-                  <Button
-                    className="mt-4 w-full"
-                    onClick={() =>
-                      navigate(`/order/${dish._id}`)
-                    }
-                  >
-                    Order Now
-                  </Button>
+                    <Text color="muted" className="mt-2">
+                      {dish.description }
+                    </Text>
 
-                </div>
-              </Card>
-            ))
+                    <Text
+                      color="dark"
+                      className="mt-3 font-bold text-lg"
+                    >
+                      ₹{dish.price}
+                    </Text>
+
+                    <Button
+                      className="mt-4 w-fit"
+                      onClick={() =>
+                        navigate(`/order/${dish._id}`)
+                      }
+                    >
+                      Order Now
+                    </Button>
+
+                  </div>
+
+                </Card>
+              );
+            })
           )}
 
         </div>

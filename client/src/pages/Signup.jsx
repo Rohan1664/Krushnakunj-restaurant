@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import Header from "../components/layout/Header";
 import { signupUser } from "../services/authService";
 
 import {
@@ -47,113 +46,130 @@ const Signup = () => {
   };
 
   return (
-    <div className="pt-16">
+    <Section className="min-h-screen flex items-center bg-gray-100">
+      <Container size="lg">
 
-      {/* HEADER */}
-      <Header
-        title="Signup"
-        subtitle="Create your premium account ✨"
-        bgImage="/images/hero/signup.jpg"
-      />
+        <div className="grid md:grid-cols-2 bg-white rounded-2xl shadow-xl overflow-hidden">
 
-      <Section className="bg-gradient-to-br from-orange-50 to-gray-100">
-        <Container className="flex justify-center items-center min-h-[70vh]">
+          {/* LEFT SIDE - FORM */}
+          <div className="p-8 md:p-12 space-y-12 flex flex-col justify-center">
 
-          <form
-            onSubmit={handleSubmit}
-            className="w-full max-w-md p-8 rounded-2xl shadow-xl backdrop-blur-md bg-white/80 border border-gray-200 space-y-5"
-          >
-
-            {/* TITLE */}
-            <Text variant="title" className="text-center text-orange-500">
+            <Text variant="title" className="text-orange-500">
               Create Account
             </Text>
 
-            {/* NAME */}
-            <Input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Full Name"
-              className="focus:ring-2 focus:ring-orange-400"
-              required
-            />
+            <form onSubmit={handleSubmit} className="space-y-6">
 
-            {/* EMAIL */}
-            <Input
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder=" Email Address"
-              type="email"
-              className="focus:ring-2 focus:ring-orange-400"
-              required
-            />
-
-            {/* PASSWORD */}
-            <div className="relative">
               <Input
-                name="password"
-                value={form.password}
+                name="name"
+                value={form.name}
                 onChange={handleChange}
-                placeholder=" Password"
-                type={showPassword ? "text" : "password"}
-                className="focus:ring-2 focus:ring-orange-400 pr-10"
+                placeholder="Full Name"
                 required
               />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 cursor-pointer text-gray-500"
-              >
-                {showPassword ? "🙈" : "👁"}
-              </span>
-            </div>
 
-            {/* CONFIRM PASSWORD */}
-            <div className="relative">
               <Input
-                name="confirmPassword"
-                value={form.confirmPassword}
+                name="email"
+                value={form.email}
                 onChange={handleChange}
-                placeholder=" Confirm Password"
-                type={showConfirm ? "text" : "password"}
-                className="focus:ring-2 focus:ring-orange-400 pr-10"
+                placeholder="Email Address"
+                type="email"
                 required
               />
-              <span
-                onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-3 top-3 cursor-pointer text-gray-500"
-              >
-                {showConfirm ? "🙈" : "👁"}
-              </span>
-            </div>
 
-            {/* BUTTON */}
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-full py-3 text-lg shadow-md hover:scale-105 transition"
-            >
-               Signup
-            </Button>
+              {/* PASSWORD */}
+              <div className="relative">
+                <Input
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Password"
+                  type={showPassword ? "text" : "password"}
+                  className="pr-10"
+                  required
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 cursor-pointer"
+                >
+                  {showPassword ? "🙈" : "👁"}
+                </span>
+              </div>
 
-            {/* FOOTER */}
-            <Text className="text-center text-sm text-gray-600">
+              {/* CONFIRM PASSWORD */}
+              <div className="relative">
+                <Input
+                  name="confirmPassword"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm Password"
+                  type={showConfirm ? "text" : "password"}
+                  className="pr-10"
+                  required
+                />
+                <span
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="absolute right-3 top-3 cursor-pointer"
+                >
+                  {showConfirm ? "🙈" : "👁"}
+                </span>
+              </div>
+
+              <Button type="submit" className="w-full py-3 text-lg">
+                Signup
+              </Button>
+
+            </form>
+
+            <Text variant="small" color="muted">
               Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-orange-500 font-semibold hover:underline"
-              >
+              <Link to="/login" className="text-orange-500 font-semibold">
                 Login
               </Link>
             </Text>
+          </div>
 
-          </form>
+          {/* RIGHT SIDE - IMAGE */}
+          <div className="hidden md:block relative">
 
-        </Container>
-      </Section>
+            {/* IMAGE */}
+            <img
+              src="/images/hero/signup.png"
+              alt="Signup"
+              className="w-full h-full object-cover"
+            />
 
-    </div>
+            {/* OVERLAY */}
+            {/* <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center p-6 text-center">
+
+              <Text
+                color="primary"
+                variant="title"
+                as="h2"
+                className="text-white"
+              >
+                Signup
+              </Text>
+
+              <Text
+                variant="subtitle"
+                as="p"
+                color="primary"
+                className="mt-2 max-w-md"
+              >
+                Create your account at कृष्णकुंज{" "}
+                <span className="mx-1">and</span>{" "}
+                start your delicious journey with us!
+              </Text>
+
+            </div> */}
+
+          </div>
+
+        </div>
+
+      </Container>
+    </Section>
   );
 };
 

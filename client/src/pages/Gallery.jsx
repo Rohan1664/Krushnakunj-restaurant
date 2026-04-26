@@ -23,7 +23,7 @@ const Gallery = () => {
       <Header
         title="Gallery"
         subtitle="A glimpse of our delicious food"
-        bgImage="/images/hero/gallery.jpg"
+        bgImage="/images/hero/hero.png"
       />
 
       <Section className="bg-gray-100">

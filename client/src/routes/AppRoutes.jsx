@@ -122,7 +122,9 @@ const AppRoutes = () => {
           path="/login"
           element={
             <AuthRoute>
+              <Navbar />
               <Login />
+              <Footer />
             </AuthRoute>
           }
         />
@@ -131,7 +133,9 @@ const AppRoutes = () => {
           path="/signup"
           element={
             <AuthRoute>
+              <Navbar />
               <Signup />
+              <Footer />
             </AuthRoute>
           }
         />

@@ -50,7 +50,7 @@ const Menu = () => {
       <Header
         title="Menu"
         subtitle="Our Food"
-        bgImage="/images/hero/menu.jpg"
+        bgImage="/images/hero/hero.png"
       />
 
       {/* ✅ USE SECTION VARIANT INSTEAD OF RAW BG */}
@@ -76,6 +76,7 @@ const Menu = () => {
                 ) : (
                   products.map((item) => (
                     <Card key={item._id} className="p-4">
+                      
 
                       {/* IMAGE */}
                       <img

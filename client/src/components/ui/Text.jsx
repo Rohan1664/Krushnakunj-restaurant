@@ -7,7 +7,7 @@ const Text = ({
   className = "",
   as = "p",
 }) => {
-  const Component = as;
+  const Component = as || "p";
 
   const variants = {
     title: "text-4xl md:text-4xl font-bold",

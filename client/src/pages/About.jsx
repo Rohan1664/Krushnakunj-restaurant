@@ -10,7 +10,7 @@ const About = () => {
       <Header
         title="About Us"
         subtitle="Know more about our journey"
-        bgImage="/images/hero/about.jpg"
+        bgImage="/images/hero/hero.png"
       />
 
       {/* Content */}

@@ -4,8 +4,7 @@ import { Section, Text, Container } from "../ui";
 
 const Footer = () => {
   return (
-    <Section variant="primary" className="py-10 ">
-      
+    <Section variant="primary" className="py-10">
       <Container size="lg">
 
         <div className="grid gap-8 grid-cols-1 md:grid-cols-3">
@@ -27,23 +26,34 @@ const Footer = () => {
               Quick Links
             </Text>
 
-            <Text variant="small" color="muted" className="space-y-2">
+            {/* ✅ FIX: use div instead of Text */}
+            <div className="space-y-2">
+
               <Text as="p" color="muted">
-                <Link to="/">Home</Link>
+                <Link to="/" className="hover:underline">
+                  Home
+                </Link>
               </Text>
 
               <Text as="p" color="muted">
-                <Link to="/menu">Menu</Link>
+                <Link to="/menu" className="hover:underline">
+                  Menu
+                </Link>
               </Text>
 
               <Text as="p" color="muted">
-                <Link to="/about">About</Link>
+                <Link to="/about" className="hover:underline">
+                  About
+                </Link>
               </Text>
 
               <Text as="p" color="muted">
-                <Link to="/contact">Contact</Link>
+                <Link to="/contact" className="hover:underline">
+                  Contact
+                </Link>
               </Text>
-            </Text>
+
+            </div>
           </div>
 
           {/* CONTACT */}

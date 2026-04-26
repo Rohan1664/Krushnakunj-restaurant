@@ -1,25 +1,21 @@
 import React from "react";
-import { Card ,Section,Text} from "../ui";
+import { Card, Section, Text } from "../ui";
 
 const features = [
   {
-    title: "Fresh Ingredients",
-    desc: "We use only fresh and high-quality ingredients for every dish.",
-    icon: "🥗",
+    title: "Authentic Recipes",
+    desc: "Traditional recipes full of flavor",
+    icon: "/images/logo/dish.png",
   },
   {
-    title: "Fast Delivery",
+    title: "Family-Friendly Ambience",
     desc: "Get your food delivered quickly at your doorstep.",
-    icon: "🚀",
+    icon: "/images/logo/family.jpeg",
   },
   {
-    title: "Best Taste",
-    desc: "Delicious recipes crafted by top chefs.",
-    icon: "😋",
-  },
-  {
-    title: "Affordable Prices",
-    desc: "Enjoy premium food at pocket-friendly prices.",
+    title: "Customer Satisfaction",
+    desc: "Our guests are our top priority",
+    icon: "/images/logo/plate.jpeg",
   },
 ];
 
@@ -30,10 +26,14 @@ const WhyChooseUs = () => {
         Why Choose Us
       </Text>
 
-      <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-6 px-4">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6 px-4">
         {features.map((item, index) => (
           <Card key={index} className="p-6 text-center">
-            <div className="text-4xl mb-4">{item.icon}</div>
+            <img
+              src={item.icon}
+              alt={item.title}
+              className="w-20 h-20 mx-auto mb-4 object-contain block"
+            />
 
             <h3 className="text-xl font-semibold">
               {item.title}
